@@ -96,10 +96,12 @@
     <Compile Include="Entities\Product.cs" />
     <Compile Include="Entities\Store.cs" />
     <Compile Include="CoreDataAutomappingConfiguration.cs" />
+    <Compile Include="Entities\WebTemplate.cs" />
     <Compile Include="Mappings\EmployeeMap.cs" />
     <Compile Include="Mappings\LocationMap.cs" />
     <Compile Include="Mappings\ProductMap.cs" />
     <Compile Include="Mappings\StoreMap.cs" />
+    <Compile Include="Mappings\WebTemplateMap.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

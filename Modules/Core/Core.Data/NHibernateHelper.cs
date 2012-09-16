@@ -9,30 +9,24 @@ using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using Core.Data;
 using System.Reflection;
+using System.Collections.Generic;
+using NHibernate.Criterion;
 
 namespace Core.Data
 {
     public class NHibernateHelper
-
     {
 
         private static ISessionFactory _sessionFactory;
-
- 
-
         private static ISessionFactory SessionFactory
-
         {
-
             get
-
             {
 
                 if (_sessionFactory == null)
 
                     InitializeSessionFactory();
 
-                 
 
                 return _sessionFactory;
 
@@ -40,41 +34,26 @@ namespace Core.Data
 
         }
 
- 
-
         private static void InitializeSessionFactory()
-
         {
 
             _sessionFactory = Fluently.Configure()
+                  .Database(MsSqlConfiguration.MsSql2008
+                  .ConnectionString(
+                                 @"Data Source=BEST\SQLEXPRESS;Initial Catalog=testdb;Integrated Security=True")
+                         .ShowSql()
+                         )
 
-                .Database(MsSqlConfiguration.MsSql2008
+                  .Mappings(m =>
+                      m.FluentMappings.AddFromAssembly(Assembly.GetExecutingAssembly()).ExportTo(@"C:\"))
 
-                              .ConnectionString(
-                                  @"Data Source=BEST\SQLEXPRESS;Initial Catalog=testdb;Integrated Security=True;")
-
-                              .ShowSql()
-
-                )
-
-                .Mappings(m =>
-
-                          m.FluentMappings
-
-                              .AddFromAssemblyOf<Employee>())
-
-                .ExposeConfiguration(cfg => new SchemaExport(cfg)
-
-                                                .Create(true, true))
-
-                .BuildSessionFactory();
+                  .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))
+                  .BuildSessionFactory();
+          
 
         }
-
- 
-
+    
         public static ISession OpenSession()
-
         {
 
             return SessionFactory.OpenSession();
@@ -91,16 +70,16 @@ namespace Core.Data
         public void FillDB()
         {
             // create our NHibernate session factory
-            var sessionFactory = CreateSessionFactory();
+            var sessionFactory = NHibernateHelper.OpenSession();
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = sessionFactory)
             {
                 // populate the database
                 using (var transaction = session.BeginTransaction())
                 {
                     // create a couple of Stores each with some Products and Employees
-                    var barginBasin = new Store { Name = "Bargin Basin" };
-                    var superMart = new Store { Name = "SuperMart" };
+                    var barginBasin = new Store { Name = "Bargin Basin" ,HtmlBanner=""};
+                    var superMart = new Store { Name = "SuperMart",HtmlBanner="" };
 
                     var potatoes = new Product { Name = "Potatoes", Price = 3.60 };
                     var fish = new Product { Name = "Fish", Price = 4.49 };
@@ -132,8 +111,8 @@ namespace Core.Data
                     transaction.Commit();
                 }
             }
-
-            using (var session = sessionFactory.OpenSession())
+            sessionFactory = NHibernateHelper.OpenSession();
+            using (var session = sessionFactory)
             {
                 // retreive all stores and display them
                 using (session.BeginTransaction())
@@ -148,54 +127,103 @@ namespace Core.Data
                 }
             }
 
-         
+
         }
 
 
-        /// <summary>
-        /// Configure NHibernate. This method returns an ISessionFactory instance that is
-        /// populated with mappings created by Fluent NHibernate.
-        /// 
-        /// Line 1:   Begin configuration
-        ///      2+3: Configure the database 
-        ///      4+5: Specify what mappings are going to be used (Automappings from the CreateAutomappings method)
-        ///      6:   Expose the underlying configuration instance to the BuildSchema method,
-        ///           this creates the database.
-        ///      7:   Finally, build the session factory.
-        /// </summary>
-        /// <returns></returns>
-        private static ISessionFactory CreateSessionFactory()
+        public IList<Store> GetStores()
         {
-            var cfgh = Fluently.Configure()
-                  .Database(MsSqlConfiguration.MsSql2008
-                  .ConnectionString(
-                                 @"Data Source=BEST\SQLEXPRESS;Initial Catalog=testdb;Integrated Security=True")
-                         .ShowSql()
-                         )
-
-                  .Mappings(m =>
-                      m.FluentMappings.AddFromAssembly(Assembly.GetExecutingAssembly()).ExportTo(@"C:\"))
-
-                  .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))
-                  .BuildConfiguration();
-
-            var session = Fluently.Configure()
-                  .Database(MsSqlConfiguration.MsSql2008
-                  .ConnectionString(
-                                 @"Data Source=BEST\SQLEXPRESS;Initial Catalog=testdb;Integrated Security=True")
-                         .ShowSql()
-                         )
-                  
-                  .Mappings(m =>
-                      m.FluentMappings.AddFromAssembly(Assembly.GetExecutingAssembly()).ExportTo(@"C:\"))
-                  
-                  .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))
-                  .BuildSessionFactory();
-            return session;
+            // create our NHibernate session factory
+            var sessionFactory = NHibernateHelper.OpenSession();
+            IList<Store> storesList = new List<Store>();
+            using (var session = sessionFactory)
+            {
+                // retreive all stores and display them
+                using (session.BeginTransaction())
+                {
+                    var stores = session.CreateCriteria<Store>().List<Store>();
+                        
+                    storesList = stores;
+                   
+                }
+            }
+            return storesList;
         }
 
+        public IList<WebTemplate> GetWebTemplates()
+        {
+            // create our NHibernate session factory
+            var sessionFactory = NHibernateHelper.OpenSession();
+            IList<WebTemplate> storesList = new List<WebTemplate>();
+            using (var session = sessionFactory)
+            {
+                // retreive all stores and display them
+                using (session.BeginTransaction())
+                {
+                    var stores = session.CreateCriteria<WebTemplate>().List<WebTemplate>();
 
+                    storesList = stores;
 
+                }
+            }
+            return storesList;
+        }
+
+        public Store GetStore(int id)
+        {
+            // create our NHibernate session factory
+            var sessionFactory = NHibernateHelper.OpenSession();
+           
+            using (var session = sessionFactory)
+            {
+                // retreive all stores and display them
+                using (session.BeginTransaction())
+                {
+                    var store = session.CreateCriteria<Store>().Add(Restrictions.Eq("Id", id)).UniqueResult<Store>();
+                    return store;
+
+                }
+            }
+            return null;
+        }
+        public WebTemplate GetWebTemplate(int id)
+        {
+            // create our NHibernate session factory
+            var sessionFactory = NHibernateHelper.OpenSession();
+
+            using (var session = sessionFactory)
+            {
+                // retreive all stores and display them
+                using (session.BeginTransaction())
+                {
+                    var store = session.CreateCriteria<WebTemplate>().Add(Restrictions.Eq("Id", id)).UniqueResult<WebTemplate>();
+                    return store;
+
+                }
+            }
+            return null;
+        }
+        public Store SaveStore(Store store)
+        {
+            // create our NHibernate session factory
+            var sessionFactory = NHibernateHelper.OpenSession();
+
+            using (var session = sessionFactory)
+            {
+                using (var transaction = session.BeginTransaction())
+                {
+
+                    var newStore = store;
+                    
+                   
+                    session.SaveOrUpdate(store);
+                   
+
+                    transaction.Commit();
+                }
+            }
+            return store;
+        }
         private static void WriteStorePretty(Store store)
         {
             Console.WriteLine(store.Name);
