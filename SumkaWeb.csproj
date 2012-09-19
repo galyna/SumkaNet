@@ -37,6 +37,9 @@
     <Reference Include="AjaxMin">
       <HintPath>SquishIt-0.8.6\AjaxMin.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>packages\Common.Logging.1.2.0\lib\1.0\Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="dotless.Core">
       <HintPath>SquishIt-0.8.6\dotless.Core.dll</HintPath>
     </Reference>
@@ -95,41 +98,43 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CombinedHTMLController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Config\Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Config\Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Config\Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Config\Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Config\Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Config\Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Config\Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Config\Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\combinedHTML-tinymce.js" />
     <Content Include="Scripts\config-tinymce.js" />
@@ -272,7 +277,7 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Content\Site.css" />
+    <Content Include="Config\Content\Site.css" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

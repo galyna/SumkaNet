@@ -11,6 +11,7 @@ namespace Core.Data.Mappings
             Map(x => x.FirstName);
             Map(x => x.LastName);
             References(x => x.Store);
+
         }
     }
 }

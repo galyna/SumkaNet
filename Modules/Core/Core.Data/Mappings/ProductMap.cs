@@ -16,6 +16,7 @@ namespace Core.Data.Mappings
                 .Table("StoreProduct");
 
             Component(x => x.Location);
+            References(x => x.OwnerUser);
         }
     }
 }

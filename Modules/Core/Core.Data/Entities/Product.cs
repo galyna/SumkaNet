@@ -7,6 +7,7 @@ namespace Core.Data.Entities
         public virtual int Id { get; protected set; }
         public virtual string Name { get; set; }
         public virtual double Price { get; set; }
+        public virtual User OwnerUser { get; set; }
         public virtual Location Location { get; set; }
         public virtual IList<Store> StoresStockedIn { get; set; }
 

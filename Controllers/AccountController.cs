@@ -6,11 +6,20 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using SumkaWeb.Models;
+using Core.Data.Entities;
+using Core.Data.Repository;
 
 namespace SumkaWeb.Controllers
 {
     public class AccountController : Controller
     {
+
+        UserRepository _userRepository;
+
+        public AccountController()
+        {
+            this._userRepository = new UserRepository();
+        } 
 
         //
         // GET: /Account/LogOn
@@ -83,6 +92,8 @@ namespace SumkaWeb.Controllers
 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
+
+                    _userRepository.SaveUser(model.UserName, model.Email);
                     FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }

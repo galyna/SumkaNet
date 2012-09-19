@@ -1,8 +1,16 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model SumkaWeb.Models.HomeModel
+@{
+    ViewBag.Title = "Sumka Portal";
 }
+<div class="container">
+ <div class="row">
+      
 
-<h2>@ViewBag.Message</h2>
-<p>
-    To learn more about ASP.NET MVC visit <a href="http://asp.net/mvc" title="ASP.NET MVC Website">http://asp.net/mvc</a>.
-</p>
+        @foreach (var item in Model.Stores) {
+    
+            @Html.DisplayTextFor(modelItem => item.HtmlBanner)
+       
+         }
+      
+   </div>
+   </div>

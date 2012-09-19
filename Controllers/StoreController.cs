@@ -5,19 +5,23 @@ using System.Web;
 using System.Web.Mvc;
 using Core.Data;
 using Core.Data.Entities;
+using Core.Data.Repository;
 
 namespace SumkaWeb.Controllers
 {
       [ValidateInput(false)]
     public class StoreController : Controller
     {
-        //
-        // GET: /Storage/
+          private StoreRepository _storeRepository;
+
+          public  StoreController()
+          {
+              _storeRepository = new StoreRepository();
+          }
 
         public ActionResult Index()
         {
-            var db = new NHibernateFiller();
-           IList<Store> stores= db.GetStores();
+            IList<Store> stores = _storeRepository.GetStores();
            return View(stores);
         }
 
@@ -45,7 +49,7 @@ namespace SumkaWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                _storeRepository.SaveStore(new Store() { Name = collection["Name"], HtmlBanner = collection["HtmlBanner"] });
 
                 return RedirectToAction("Index");
             }
@@ -60,8 +64,7 @@ namespace SumkaWeb.Controllers
  
         public ActionResult Edit(int id)
         {
-            var db = new NHibernateFiller();
-            Store store = db.GetStore(id);
+            Store store = _storeRepository.GetStore(id);
           return View(store);
         }
 
@@ -75,21 +78,10 @@ namespace SumkaWeb.Controllers
             {
                 var db = new NHibernateFiller();
                 Store store = db.GetStore(id);
-                foreach (var key in collection.AllKeys)
-                {
-                    var value = collection[key];
-                    if (key == "Name")
-                    {
-                        store.Name = value;
-                    }
-                    if (key == "HtmlBanner")
-                    {
-                        store.HtmlBanner = value;
-                    }
-                   
-                }
-                // TODO: Add update logic here
-                db.SaveStore(store);
+                store.Name=collection["Name"];
+                store.HtmlBanner=collection["HtmlBanner"];
+
+                _storeRepository.SaveStore(store);
                 return RedirectToAction("Index");
             }
             catch
