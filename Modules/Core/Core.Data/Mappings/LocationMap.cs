@@ -7,6 +7,7 @@ namespace Core.Data.Mappings
     {
         public LocationMap()
         {
+           // Id(x => x.Id);
             Map(x => x.Aisle);
             Map(x => x.Shelf);
         }

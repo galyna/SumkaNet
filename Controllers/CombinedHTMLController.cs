@@ -11,6 +11,8 @@ using Core.Data;
 using Core.Data.Entities;
 using SquishIt.Framework;
 using SumkaWeb.Models;
+using Core.Data.Repository;
+using Core.Data.Repository.Interfaces;
 
 namespace SumkaWeb.Controllers
 {
@@ -21,8 +23,12 @@ namespace SumkaWeb.Controllers
         private string _getTemplateQuery = "GetTemplate?id={0}";
         private const string _rootImagesFolder = "Root";
         private const string _rootImagesFolderPath = "Content/img/";
-
+        private readonly IRepository<WebTemplate> WebTemplateRepository;
         #endregion
+        public CombinedHTMLController()
+        {
+            WebTemplateRepository = new Repository<WebTemplate>();
+        }
 
         #region Templates Init
         public JsonResult GetTinyMceInitSettings()
@@ -52,9 +58,7 @@ namespace SumkaWeb.Controllers
 
         private List<TemplateModel> GetTemplatesList()
         {
-            var db = new NHibernateFiller();
-
-            IList<WebTemplate> templatesDB =  db.GetWebTemplates();
+            IList<WebTemplate> templatesDB = WebTemplateRepository.GetAll().ToList();
             List<TemplateModel> templates = new List<TemplateModel>();
             foreach (var item in templatesDB)
             {
@@ -72,11 +76,8 @@ namespace SumkaWeb.Controllers
 
         public ActionResult GetTemplate(int id)
         {
-
-            var db = new NHibernateFiller();
-
-           WebTemplate template = db.GetWebTemplate(id);
-           return Content(template.Html);
+            WebTemplate template = WebTemplateRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
+            return Content(template.Html);
         }
 
         public ActionResult GetTemplateCss()

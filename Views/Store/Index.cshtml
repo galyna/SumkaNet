@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Core.Data.Entities.Store>
+﻿@model List<Core.Data.Entities.Store>
 
 @{
     ViewBag.Title = "Index";
@@ -17,6 +17,9 @@
         <th>
             HtmlBanner
         </th>
+        <th>
+            Products
+        </th>
        
     </tr>
 
@@ -29,7 +32,9 @@
             @Html.DisplayTextFor(modelItem => item.HtmlBanner)
         </td>
         <td>
-         
+       
+      
+      
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

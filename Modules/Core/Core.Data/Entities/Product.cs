@@ -11,6 +11,10 @@ namespace Core.Data.Entities
         public virtual Location Location { get; set; }
         public virtual IList<Store> StoresStockedIn { get; set; }
 
+        public virtual string HtmlBanner { get; set; }
+        public virtual string HtmlDetail { get; set; }
+        public virtual string DetailURL { get; set; }
+
         public Product()
         {
             StoresStockedIn = new List<Store>();

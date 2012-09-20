@@ -6,23 +6,29 @@ using System.Web.Mvc;
 using Core.Data;
 using Core.Data.Entities;
 using Core.Data.Repository;
+using SumkaWeb.Models;
+using Core.Data.Repository.Interfaces;
 
 namespace SumkaWeb.Controllers
 {
-      [ValidateInput(false)]
+    [ValidateInput(false)]
     public class StoreController : Controller
     {
-          private StoreRepository _storeRepository;
+        private readonly IRepository<Store> StoreRepository;
+        private readonly IRepository<WebTemplate> WebTemplateRepository;
+        private readonly IRepository<Product> ProductsRepository;
 
-          public  StoreController()
-          {
-              _storeRepository = new StoreRepository();
-          }
+        public StoreController()
+        {
+            StoreRepository = new Repository<Store>();
+            WebTemplateRepository = new Repository<WebTemplate>();
+            ProductsRepository = new Repository<Product>();
+        }
 
         public ActionResult Index()
         {
-            IList<Store> stores = _storeRepository.GetStores();
-           return View(stores);
+            IList<Store> stores = StoreRepository.GetAll().ToList();
+            return View(stores);
         }
 
         //
@@ -30,7 +36,9 @@ namespace SumkaWeb.Controllers
 
         public ActionResult Details(int id)
         {
-            return View();
+            Store store = StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
+
+            return View(store);
         }
 
         //
@@ -38,8 +46,8 @@ namespace SumkaWeb.Controllers
 
         public ActionResult Create()
         {
-            return View();
-        } 
+            return View(new Store());
+        }
 
         //
         // POST: /Storage/Create
@@ -49,8 +57,8 @@ namespace SumkaWeb.Controllers
         {
             try
             {
-                _storeRepository.SaveStore(new Store() { Name = collection["Name"], HtmlBanner = collection["HtmlBanner"] });
-
+                StoreRepository.SaveOrUpdate(new Store() { Name = collection["Name"], HtmlBanner = collection["HtmlBanner"] });
+                WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = collection["Name"] + "_Store", Html = collection["HtmlBanner"] });
                 return RedirectToAction("Index");
             }
             catch
@@ -58,14 +66,14 @@ namespace SumkaWeb.Controllers
                 return View();
             }
         }
-        
+
         //
         // GET: /Storage/Edit/5
- 
+
         public ActionResult Edit(int id)
         {
-            Store store = _storeRepository.GetStore(id);
-          return View(store);
+            Store store = StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
+            return View(store);
         }
 
         //
@@ -76,12 +84,12 @@ namespace SumkaWeb.Controllers
         {
             try
             {
-                var db = new NHibernateFiller();
-                Store store = db.GetStore(id);
-                store.Name=collection["Name"];
-                store.HtmlBanner=collection["HtmlBanner"];
+                Store store = StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
+                store.Name = collection["Name"];
+                store.HtmlBanner = collection["HtmlBanner"];
 
-                _storeRepository.SaveStore(store);
+                StoreRepository.SaveOrUpdate(store);
+                WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = store.Name + "_Store", Html = store.HtmlBanner });
                 return RedirectToAction("Index");
             }
             catch
@@ -92,7 +100,7 @@ namespace SumkaWeb.Controllers
 
         //
         // GET: /Storage/Delete/5
- 
+
         public ActionResult Delete(int id)
         {
             return View();
@@ -107,7 +115,7 @@ namespace SumkaWeb.Controllers
             try
             {
                 // TODO: Add delete logic here
- 
+
                 return RedirectToAction("Index");
             }
             catch

@@ -13,7 +13,7 @@ namespace Core.Data.Mappings
         {
             Id(x => x.Id);
             Map(x => x.Name);
-            Map(x => x.Html);
+            Map(x => x.Html).CustomSqlType("NTEXT"); ;
         }
     }
 }

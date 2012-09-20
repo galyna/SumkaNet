@@ -9,6 +9,8 @@ namespace Core.Data.Entities
         public virtual IList<Product> Products { get; set; }
         public virtual IList<Employee> Staff { get; set; }
         public virtual string HtmlBanner { get; set; }
+        public virtual string HtmlDetail { get; set; }
+        public virtual string DetailURL { get; set; }
         public virtual string AddMediaPath { get; set; }
         public Store()
         {
@@ -21,6 +23,11 @@ namespace Core.Data.Entities
             product.StoresStockedIn.Add(this);
             Products.Add(product);
         }
+
+        public virtual IList<Product> GetProducts()
+        {          
+           return Products;
+        }  
 
         public virtual void AddEmployee(Employee employee)
         {

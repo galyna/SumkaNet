@@ -88,6 +88,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
@@ -107,13 +108,9 @@
     <Compile Include="Mappings\WebTemplateMap.cs" />
     <Compile Include="NHibernateHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\HomeRepository.cs" />
-    <Compile Include="Repository\Interfaces\IHomeRepository.cs" />
-    <Compile Include="Repository\ProductsRepository.cs" />
-    <Compile Include="Repository\SampleDBRepository.cs" />
-    <Compile Include="Repository\StoreRepository.cs" />
-    <Compile Include="Repository\UserRepository.cs" />
-    <Compile Include="Repository\WebTemplateRepository.cs" />
+    <Compile Include="Repository\Interfaces\IRepository.cs" />
+    <Compile Include="NHibernateSessionPerRequest.cs" />
+    <Compile Include="Repository\Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -8,17 +8,18 @@ using System.Web.Security;
 using SumkaWeb.Models;
 using Core.Data.Entities;
 using Core.Data.Repository;
+using Core.Data.Repository.Interfaces;
 
 namespace SumkaWeb.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IRepository<User> UserRepository;
 
-        UserRepository _userRepository;
 
         public AccountController()
         {
-            this._userRepository = new UserRepository();
+            UserRepository = new Repository<User>();
         } 
 
         //
@@ -93,7 +94,7 @@ namespace SumkaWeb.Controllers
                 if (createStatus == MembershipCreateStatus.Success)
                 {
 
-                    _userRepository.SaveUser(model.UserName, model.Email);
+                    UserRepository.SaveOrUpdate(new User(){UserName=model.UserName,Email= model.Email});
                     FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }
