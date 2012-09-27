@@ -47,7 +47,7 @@ namespace Core.Data
                   .Mappings(m =>
                       m.FluentMappings.AddFromAssembly(Assembly.GetExecutingAssembly()).ExportTo(@"C:\"))
 
-                  .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, false))
+                  .ExposeConfiguration(cfg => new SchemaExport(cfg).Create(true, true))
                   .BuildSessionFactory();         
 
         }

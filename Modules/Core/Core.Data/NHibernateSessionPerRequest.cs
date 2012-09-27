@@ -25,8 +25,6 @@ namespace Core.Data
         // Returns our NHibernate session factory
         private static ISessionFactory CreateSessionFactory()
         {
-            var mappings = CreateMappings();
-
             return Fluently
                 .Configure()
                 .Database(MsSqlConfiguration.MsSql2008
@@ -39,25 +37,15 @@ namespace Core.Data
                         BuildSchema(c);
                         c.Properties[NHibernate.Cfg.Environment.CurrentSessionContextClass] = "web";
                     })
-                .BuildSessionFactory();
+                  .BuildSessionFactory();    
         }
 
-        // Returns our NHibernate auto mapper
-        private static AutoPersistenceModel CreateMappings()
-        {
-            return AutoMap
-                .Assembly(System.Reflection.Assembly.GetCallingAssembly())
-                .Where(t => t.Namespace == "Core.Data.Entities")
-                .Conventions.Setup(c =>
-                    {
-                        c.Add(DefaultCascade.SaveUpdate());
-                    });
-        }
+     
 
         // Drops and creates the database shema
         private static void BuildSchema(Configuration cfg)
         {
-            new SchemaExport(cfg);//.Create(false, true); 
+            new SchemaExport(cfg);//.Create(true, false);
         }
 
         // Initializes the HTTP module

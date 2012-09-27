@@ -1,35 +1,17 @@
-﻿@model SumkaWeb.Models.StoreDetailsModel
+﻿@model Core.Data.Entities.Store
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.Name;
 }
-<h2>
-    Details</h2>
-<fieldset>
-    <legend>Service</legend>
-    <div class="display-label">
-        Name</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Store.Name)
-    </div>
-    <div class="display-label">
-        HtmlBanner</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Store.HtmlBanner)
-    </div>
-
-    @foreach (var item in Model.Products)
-    {
-    
-        <div class="display-label">
-            Name</div>
-        <div class="display-field">
-            @Html.DisplayFor(modelItem => item.Name)
-        </div>
-        @Html.DisplayTextFor(modelItem => item.HtmlBanner)
+<div class="container">
+ <div class="row">
+     @Html.ActionLink("Add Product", "AddProduct", new { id = Model.Id })
        
-    }
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+    </div>
+    <div class="row">
+   
+        @foreach (var item in Model.Products)
+        {                 
+            @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.HtmlBanner)) 
+        }
+    </div>
+</div>

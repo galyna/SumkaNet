@@ -12,5 +12,6 @@ namespace Core.Data.Repository.Interfaces
         IQueryable<T> Get(Expression<Func<T, bool>> predicate);
         IEnumerable<T> SaveOrUpdateAll(params T[] entities);
         T SaveOrUpdate(T entity);
+        T Delete(T entity);
     }
 }

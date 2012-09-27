@@ -1,44 +1,58 @@
-﻿@model Core.Data.Entities.Store
+﻿@model SumkaWeb.Models.StoreEditModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Store";
 }
-<h2>
-    Edit</h2>
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/tiny_mce_src.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/combinedHTML-tinymce.js")" type="text/javascript"></script>
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Store</legend>
-        @Html.HiddenFor(model => model.Id)
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Name)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-        <div class="editor-label">
-            @Html.LabelFor(model => model.HtmlBanner)
-        </div>
-        <div class="editor-field">
-            @Html.TextAreaFor(model => model.HtmlBanner, 25, 80,
-     new Dictionary<string, object> {	
-        {"style", "width:100%"}
-	 })
-        </div>
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
-}
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-<script type="text/javascript">
-
+<div class="container">
+    <div class="row">
+        @using (Html.BeginForm())
+        {
    
-</script>
+            @Html.ValidationSummary(true)
+            <fieldset>
+                <legend>Store</legend>
+                @Html.HiddenFor(model => model.Store.Id)
+                
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Store.Name)
+                    @Html.ValidationMessageFor(model => model.Store.Name)
+                </div>
+                @if (Model.Store.HtmlBanner != null) {
+                            @Html.Raw(System.Web.HttpUtility.HtmlDecode(Model.Store.HtmlBanner ))
+                }
+                <div class="editor-field">
+                    @Html.TextArea("Store.HtmlBanner", System.Web.HttpUtility.HtmlDecode(Model.Store.HtmlBanner), 25, 80,
+     new Dictionary<string, object> {	
+        {"style", "width:100%"},
+         {"class", "html tinymce"}
+	 })
+                </div>
+                @foreach (var item in Model.Store.Products)
+                {
+                    <div class="row">
+                        <div class="span24">
+                            <div class="span16">
+                                @Html.DisplayFor(modelItem => item.Name)
+                                @Html.ActionLink("Edit Product", "EditProduct", new { id = item.Id })
+                                 
+                            </div>
+                           
+                        </div>
+                    </div>
+                   
+                }
+                <p>
+                 @Html.ActionLink("Add Product", "AddProduct", new { id = Model.Store.Id })
+                    <input type="submit" value="Save" />
+                </p>
+            </fieldset>
+       
+        }
+        <div>
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    </div>
+</div>

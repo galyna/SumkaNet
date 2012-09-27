@@ -56,7 +56,7 @@ namespace SumkaWeb.Controllers
 
         public ActionResult Index()
         {
-            Seed();
+            //Seed();
             return View(new HomeModel() { Stores = StoreRepository.GetAll().ToList()});
         }
 

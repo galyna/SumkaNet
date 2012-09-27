@@ -307,17 +307,17 @@ namespace SumkaWeb.Controllers
 
         #region Templates Save
 
-        //public ActionResult SaveWebTemplate(string html, string name)
-        //{
-        //    var item = _services.ContentManager.New<WebTemplatePart>(WebTemplatePart.TypeName);
-        //    item.Html = html;
-        //    item.Title = name;
-        //    _services.ContentManager.Create(item);
-        //    var model = new TinymceInitSettingsModel();
-        //    model.templates = GetTemplatesList();
-        //    return Json(model, JsonRequestBehavior.AllowGet);
+        public ActionResult SaveWebTemplate(string html, string name)
+        {
+            WebTemplate item = new WebTemplate();
+            item.Html = html;
+            item.Name= name;
+            WebTemplateRepository.SaveOrUpdate(item);
+            var model = new TinymceInitSettingsModel();
+            model.templates = GetTemplatesList();
+            return Json(model, JsonRequestBehavior.AllowGet);
 
-        //}
+        }
 
         #endregion
 

@@ -43,5 +43,12 @@ namespace Core.Data.Repository
 
             return entity;
         }
+
+        public T Delete(T entity)
+        {
+            Session.Delete(entity);
+
+            return entity;
+        }
     }
 }

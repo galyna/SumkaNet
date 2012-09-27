@@ -57,8 +57,10 @@ namespace SumkaWeb.Controllers
         {
             try
             {
-                StoreRepository.SaveOrUpdate(new Store() { Name = collection["Name"], HtmlBanner = collection["HtmlBanner"] });
-                WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = collection["Name"] + "_Store", Html = collection["HtmlBanner"] });
+                var name = collection["Name"];
+                var htmlBanner = Server.HtmlEncode(collection["HtmlBanner"]);
+                StoreRepository.SaveOrUpdate(new Store() { Name = name, HtmlBanner = htmlBanner });
+                WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = name + "_Store", Html = htmlBanner });
                 return RedirectToAction("Index");
             }
             catch
@@ -73,7 +75,10 @@ namespace SumkaWeb.Controllers
         public ActionResult Edit(int id)
         {
             Store store = StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
-            return View(store);
+
+            StoreEditModel storeEditModel = new StoreEditModel() { Store = store };
+
+            return View(storeEditModel);
         }
 
         //
@@ -85,11 +90,11 @@ namespace SumkaWeb.Controllers
             try
             {
                 Store store = StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
-                store.Name = collection["Name"];
-                store.HtmlBanner = collection["HtmlBanner"];
+                store.Name = collection["Store.Name"];
+                store.HtmlBanner = Server.HtmlEncode(collection["Store.HtmlBanner"]);// collection["Store.HtmlBanner"];
 
                 StoreRepository.SaveOrUpdate(store);
-                WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = store.Name + "_Store", Html = store.HtmlBanner });
+                WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = store.Name + "StoreWebTemplate", Html = store.HtmlBanner });
                 return RedirectToAction("Index");
             }
             catch
@@ -103,7 +108,7 @@ namespace SumkaWeb.Controllers
 
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault());
         }
 
         //
@@ -114,14 +119,29 @@ namespace SumkaWeb.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
+                StoreRepository.Delete(StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault());
                 return RedirectToAction("Index");
             }
             catch
             {
                 return View();
             }
+        }
+
+        //
+        // GET: /Storage/EditProduct/5
+
+        public ActionResult EditProduct(int id)
+        {
+            return RedirectToAction("Edit", "Product", new { id = id });
+        }
+
+        //
+        // GET: /Storage/AddProduct/5
+
+        public ActionResult AddProduct(int id)
+        {
+            return RedirectToAction("Create", "Product", new { id = id });
         }
     }
 }

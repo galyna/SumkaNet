@@ -1,47 +1,22 @@
 ﻿@model List<Core.Data.Entities.Store>
-
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            Name
-        </th>
-        <th>
-            HtmlBanner
-        </th>
-        <th>
-            Products
-        </th>
-       
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayTextFor(modelItem => item.HtmlBanner)
-        </td>
-        <td>
-       
-      
-      
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+<div class="container">
+    @{
+        ViewBag.Title = "Store";
+    }
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    @foreach (var item in Model)
+    { 
+        <br />
+        <div class="row">
+            @Html.Raw(item.Name)
+            @if (item.HtmlBanner != null) {
+            @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.HtmlBanner))
+            }
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </div>
+    }
+</div>

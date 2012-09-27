@@ -1,15 +1,20 @@
 ﻿@model SumkaWeb.Models.HomeModel
+
 @{
     ViewBag.Title = "Sumka Portal";
 }
 <div class="container">
  <div class="row">
-      
+ 
 
-        @foreach (var item in Model.Stores) {
-    
-            @Html.DisplayTextFor(modelItem => item.HtmlBanner)
-       
+
+        @foreach (var item in Model.Stores)
+        {
+           if (item.HtmlBanner != null)
+            {
+               @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.HtmlBanner))
+            }
+                 
          }
       
    </div>
