@@ -18,13 +18,13 @@
         <div class="container">
             <div class="menu_top">
                 <div class="menu_top_list">
-                     @Html.Menu(
-                    "<ul class='navigation'>"+
-                       " <li class='first'><a class='link typ1' href='\'>Home</a></li>"+
-                        "<li class='typ2'><a href='"+@"Store"+"' class='typ2'>Store</a></li>"+
-                        "<li><a class='typ3' href='Product'>Products</a></li>"+
-                       " <li><a class='typ4' href='#'>News</a></li>"+
-                       " <li class='last'><a class='typ6' href='#'>Contacts</a></li>"+
+                    @Html.Menu(
+                    "<ul class='navigation'>" +
+                       " <li class='first'><a class='link typ1' href='" + "/Home" + "'>Home</a></li>" +
+                        "<li class='typ2'><a href='" + "/Store" + "' class='typ2'>Store</a></li>" +
+                        "<li><a class='typ3' href='" + "/Product" + "'>Products</a></li>" +
+                       " <li><a class='typ4' href='#'>News</a></li>" +
+                       " <li class='last'><a class='typ6' href='#'>Contacts</a></li>" +
                    " </ul>")
                     <div class="clear">
                     </div>
@@ -49,13 +49,13 @@
                 <div class="row">
                     <div class="span19">
                         <div class="menu_footer">
-                          @Html.Menu(
-                          "<ul class='navigation'>"+
-                            " <li class='first '><a class='link typ1' href='\'>Home</a></li>"+
-                                       " <li class='typ2 '><a href='Store' class='typ2'>Store</a></li>" +
-                                        " <li><a class='typ3 ' href='Product'>Products</a></li>" +
-                               " <li><a class='typ4 ' href='#'>News</a></li>"+
-                               "<li class='last'><a class='typ6' href='#'>Contacts</a></li>"+
+                            @Html.Menu(
+                          "<ul class='navigation'>" +
+                                              " <li class='first '><a class='link typ1' href='" + "/Home" + "'>Home</a></li>" +
+                                                " <li class='typ2 '><a href='" + "/Store" + "' class='typ2'>Store</a></li>" +
+                                                          " <li><a class='typ3 ' href='" + "/Product" + "'>Products</a></li>" +
+                               " <li><a class='typ4 ' href='#'>News</a></li>" +
+                               "<li class='last'><a class='typ6' href='#'>Contacts</a></li>" +
                             "</ul>")
                             <div class="clear">
                             </div>
@@ -97,7 +97,6 @@
                     </div>
                 </div>
             </div>
-          
         </div>
     </div>
     <!--********************
@@ -109,12 +108,12 @@
     <!--Menu full width-->
     <script src="@Url.Content("~/Scripts/sumkaScripts/menu_full_width.js")" type="text/javascript"></script>
     <script type="text/javascript">
-     
+
         window.onload = window.onresize = function (event) {
 
             /*Menu top*/
             MenuResizer.resize(".menu_top", ".menu_top_list", true);
-          
+
         }
     </script>
     <!--Menu full width ends-->

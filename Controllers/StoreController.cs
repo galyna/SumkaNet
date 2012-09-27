@@ -85,13 +85,13 @@ namespace SumkaWeb.Controllers
         // POST: /Storage/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(StoreEditModel model)
         {
             try
             {
-                Store store = StoreRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
-                store.Name = collection["Store.Name"];
-                store.HtmlBanner = Server.HtmlEncode(collection["Store.HtmlBanner"]);// collection["Store.HtmlBanner"];
+                Store store = StoreRepository.Get(s => s.Id.Equals(model.Store.Id)).SingleOrDefault();
+                store.Name = model.Store.Name;
+                store.HtmlBanner = Server.HtmlEncode(model.Store.HtmlBanner);// collection["Store.HtmlBanner"];
 
                 StoreRepository.SaveOrUpdate(store);
                 WebTemplateRepository.SaveOrUpdate(new WebTemplate() { Name = store.Name + "StoreWebTemplate", Html = store.HtmlBanner });

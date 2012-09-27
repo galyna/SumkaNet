@@ -10,6 +10,7 @@ namespace Core.Data.Mappings
             Id(x => x.Id);
             Map(x => x.Name);
             Map(x => x.Price);
+            //Map(x => x.BannerShortDescription);
             HasManyToMany(x => x.StoresStockedIn)
                 .Cascade.All()
                 .Inverse()

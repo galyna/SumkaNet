@@ -183,6 +183,7 @@
     <Content Include="Scripts\plugins\template\langs\en_dlg.js" />
     <Content Include="Scripts\plugins\template\langs\template_editor.js" />
     <Content Include="Scripts\plugins\template\template.htm" />
+    <Content Include="Scripts\sumkaScripts\create_product.js" />
     <Content Include="Scripts\sumkaScripts\events_init.js" />
     <Content Include="Scripts\sumkaScripts\menu_full_width.js" />
     <Content Include="Scripts\sumkaScripts\scroller_load_img.js" />

@@ -13,7 +13,7 @@ namespace Core.Data.Entities
 
         public virtual string HtmlBanner { get; set; }
         public virtual string HtmlDetail { get; set; }
-        public virtual string DetailURL { get; set; }
+        //public virtual string BannerShortDescription { get; set; }
 
         public Product()
         {
