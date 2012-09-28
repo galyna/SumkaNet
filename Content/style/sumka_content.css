@@ -1,6 +1,6 @@
-@import "../../Themes/EleksCookiesTheme/Content/style/style.css";
-@import "../../Themes/EleksCookiesTheme/Content/style/customization_style.css";
-@import "../../Themes/EleksCookiesTheme/Content/style/responsive.css";
+@import "../../Content/style/style.css";
+@import "../../Content/style/customization_style.css";
+@import "../../Content/style/responsive.css";
 
 
 .template-hover { border:2px solid red;}

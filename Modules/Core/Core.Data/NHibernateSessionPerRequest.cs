@@ -45,7 +45,7 @@ namespace Core.Data
         // Drops and creates the database shema
         private static void BuildSchema(Configuration cfg)
         {
-            new SchemaExport(cfg).Create(true, true);
+            new SchemaExport(cfg).Create(true, false);
         }
 
         // Initializes the HTTP module
