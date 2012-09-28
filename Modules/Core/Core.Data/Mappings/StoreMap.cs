@@ -9,7 +9,8 @@ namespace Core.Data.Mappings
         {
             Id(x => x.Id);
             Map(x => x.Name);
-            Map(x => x.DetailURL);
+            Map(x => x.Description);
+            Map(x => x.ImagePath);
             Map(x => x.HtmlBanner).CustomSqlType("nvarchar(max)");
             HasManyToMany(x => x.Products)
                 .Cascade.All()

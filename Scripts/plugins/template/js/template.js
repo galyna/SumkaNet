@@ -90,7 +90,7 @@ var TemplateDialog = {
     },
     saveWebTemplate: function (template) {
         var webTemplateHtml = template.html,
-       url = tinyMCEPopup.editor.documentBaseURI.toAbsolute("SaveWebTemplate"),
+       url = tinyMCEPopup.editor.documentBaseURI.toAbsolute(tinyMCE.Controller+"SaveWebTemplate"),
         webTemplateName = template.name
         $.ajax({
             type: 'GET',

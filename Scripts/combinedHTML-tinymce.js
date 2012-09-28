@@ -17,9 +17,9 @@ function initTinyMCE(options) {
         extended_valid_elements: "script[type|defer|src|language]",
         template_templates: options.templates,
         valid_children: "+a[div|h3]",
-        content_css: options.cssAction,
-        document_base_url: options.cssAction.replace("GetTemplateCss", "").replace("/Edit", ""),
-        external_link_list_url: options.cssAction.replace("GetTemplateCss", "GetLinksList").replace("/Edit", ""),
+        content_css: options.Controller + "GetTemplateCss",
+        document_base_url: options.Host,
+        external_link_list_url: options.Controller + "GetLinksList",
         external_image_list_url: "",
         external_scripts_list: options.scripts,
         force_br_newlines: false,
@@ -45,7 +45,7 @@ function initTinyMCE(options) {
     });
     tinyMCE.Host = options.Host;
     tinyMCE.ContentRootFolder = options.ContentRootFolder.replace("img/", "");
-
+    tinyMCE.Controller = options.Controller;
 }
 
 function ajaxLoad() {

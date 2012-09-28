@@ -20,7 +20,7 @@ namespace SumkaWeb.Controllers
     public class CombinedHTMLController : Controller
     {
         #region Private firlds
-        private string _getTemplateQuery = "GetTemplate?id={0}";
+        private string _getTemplateQuery = "CombinedHTML/GetTemplate?id={0}";
         private const string _rootImagesFolder = "Root";
         private const string _rootImagesFolderPath = "Content/img/";
         private readonly IRepository<WebTemplate> WebTemplateRepository;
@@ -77,7 +77,7 @@ namespace SumkaWeb.Controllers
         public ActionResult GetTemplate(int id)
         {
             WebTemplate template = WebTemplateRepository.Get(s => s.Id.Equals(id)).SingleOrDefault();
-            return Content(template.Html);
+            return Content(Server.HtmlDecode(template.Html));
         }
 
         public ActionResult GetTemplateCss()
@@ -107,32 +107,32 @@ namespace SumkaWeb.Controllers
         #region Templates Images
         public ActionResult GetImagesList(string selectedFolder)
         {
-            List<ImageModel> imageList = null;// FillImagesList(selectedFolder);
+            List<ImageModel> imageList =  FillImagesList(selectedFolder);
             return Json(imageList, JsonRequestBehavior.AllowGet);
         }
 
-        //private List<ImageModel> FillImagesList(string sourceDir)
-        //{
-        //    List<ImageModel> imageList = new List<ImageModel>();
-        //    string[] files = Directory.GetFiles(sourceDir);
-        //    var urlPrefix = Path.Combine(Request.Url.Scheme + "://" + Request.Url.DnsSafeHost + ":" + Request.Url.Port + Request.ApplicationPath + _rootImagesFolderPath, new DirectoryInfo(sourceDir).Name);
-        //    if (IsRootFolder(sourceDir))
-        //    {
-        //        urlPrefix = Request.ApplicationPath + _rootImagesFolderPath;
-        //    }
+        private List<ImageModel> FillImagesList(string sourceDir)
+        {
+            List<ImageModel> imageList = new List<ImageModel>();
+            string[] files = Directory.GetFiles(sourceDir);
+            var urlPrefix = Path.Combine(Request.Url.Scheme + "://" + Request.Url.DnsSafeHost + ":" + Request.Url.Port + Request.ApplicationPath + _rootImagesFolderPath, new DirectoryInfo(sourceDir).Name);
+            if (IsRootFolder(sourceDir))
+            {
+                urlPrefix = Request.ApplicationPath + _rootImagesFolderPath;
+            }
 
-        //    foreach (string filePath in files)
-        //    {
-        //        string fullName = Path.GetFileName(filePath);
-        //        string extention = Path.GetExtension(filePath);
+            foreach (string filePath in files)
+            {
+                string fullName = Path.GetFileName(filePath);
+                string extention = Path.GetExtension(filePath);
 
-        //        if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".jpeg") || extention.Equals(".gif"))
-        //        {
-        //            imageList.Add(new ImageModel() { name = fullName, src = Path.Combine(urlPrefix, fullName) });
-        //        }
-        //    }
-        //    return imageList;
-        //}
+                if (extention.Equals(".png") || extention.Equals(".jpg") || extention.Equals(".jpeg") || extention.Equals(".gif"))
+                {
+                    imageList.Add(new ImageModel() { name = fullName, src = Path.Combine(urlPrefix, fullName) });
+                }
+            }
+            return imageList;
+        }
         public ActionResult GetLinksList()
         {
             var pages = new List<string>();// _pagePropertiesService.GetPageURLs();
@@ -165,142 +165,142 @@ namespace SumkaWeb.Controllers
         }
 
         #region Templates ImageUpload
-        //public ActionResult ImageUpload()
-        //{
-        //    return PartialView(UpdateFolders(new CombinedHTMLImageUpload(), null));
-        //}
+        public ActionResult ImageUpload()
+        {
+            return PartialView(UpdateFolders(new CombinedHTMLImageUpload(), null));
+        }
 
-        //[HttpPost, ActionName("ImageUpload")]
-        //public ActionResult ImageUpload(string selectedFolderUrl, HttpPostedFileBase fileUpload)
-        //{
-        //    var fileUploaded = (fileUpload != null && fileUpload.ContentLength > 0) ? true : false;
-        //    var viewModel = new CombinedHTMLImageUpload();
-        //    viewModel = UpdateFolders(viewModel, null);
+        [HttpPost, ActionName("ImageUpload")]
+        public ActionResult ImageUpload(string selectedFolderUrl, HttpPostedFileBase fileUpload)
+        {
+            var fileUploaded = (fileUpload != null && fileUpload.ContentLength > 0) ? true : false;
+            var viewModel = new CombinedHTMLImageUpload();
+            viewModel = UpdateFolders(viewModel, null);
 
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(selectedFolderUrl))
-        //        {
-        //            viewModel.Message = string.Format("Selected directory{0} not valid.", selectedFolderUrl);
-        //            Console.WriteLine(viewModel.Message);
-        //            return PartialView("ImageUpload", viewModel);
-        //        }
-        //        // Determine whether the directory exists.
-        //        if (!Directory.Exists(selectedFolderUrl))
-        //        {
-        //            viewModel.Message = string.Format("Selected directory{0} does not exists.", selectedFolderUrl);
-        //            Console.WriteLine(viewModel.Message);
-        //            return PartialView("ImageUpload", viewModel);
-        //        }
+            try
+            {
+                if (string.IsNullOrEmpty(selectedFolderUrl))
+                {
+                    viewModel.Message = string.Format("Selected directory{0} not valid.", selectedFolderUrl);
+                    Console.WriteLine(viewModel.Message);
+                    return PartialView("ImageUpload", viewModel);
+                }
+                // Determine whether the directory exists.
+                if (!Directory.Exists(selectedFolderUrl))
+                {
+                    viewModel.Message = string.Format("Selected directory{0} does not exists.", selectedFolderUrl);
+                    Console.WriteLine(viewModel.Message);
+                    return PartialView("ImageUpload", viewModel);
+                }
 
-        //        if (!fileUploaded)
-        //        {
-        //            viewModel.Message = string.Format("Upload failed.");
-        //            Console.WriteLine(viewModel.Message);
-        //            return PartialView("ImageUpload", viewModel);
-        //        }
+                if (!fileUploaded)
+                {
+                    viewModel.Message = string.Format("Upload failed.");
+                    Console.WriteLine(viewModel.Message);
+                    return PartialView("ImageUpload", viewModel);
+                }
 
-        //        string fileName = Path.GetFileName(fileUpload.FileName);
+                string fileName = Path.GetFileName(fileUpload.FileName);
 
-        //        // Try to save image.
-        //        fileUpload.SaveAs(Path.Combine(selectedFolderUrl, fileName));
-        //        viewModel = UpdateFolders(viewModel, new DirectoryInfo(selectedFolderUrl).Name);
-        //        viewModel.Message = string.Format("Image {0} was succecfully uploaded.", fileName);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        viewModel.Message = string.Format("The process failed: {0}", e.ToString());
-        //        Console.WriteLine(viewModel.Message);
-        //        return PartialView("ImageUpload", viewModel);
-        //    }
+                // Try to save image.
+                fileUpload.SaveAs(Path.Combine(selectedFolderUrl, fileName));
+                viewModel = UpdateFolders(viewModel, new DirectoryInfo(selectedFolderUrl).Name);
+                viewModel.Message = string.Format("Image {0} was succecfully uploaded.", fileName);
+            }
+            catch (Exception e)
+            {
+                viewModel.Message = string.Format("The process failed: {0}", e.ToString());
+                Console.WriteLine(viewModel.Message);
+                return PartialView("ImageUpload", viewModel);
+            }
 
-        //    return PartialView(viewModel);
-        //}
+            return PartialView(viewModel);
+        }
         #endregion
 
-        //#region Templates CreateImageFolder
-        //[HttpPost, ActionName("CreateImageFolder")]
-        //public ActionResult CreateImageFolder(string folderName)
-        //{
-        //    string path = Path.Combine(Server.MapPath("~" + _rootImagesFolderPath), folderName);
-        //    var viewModel = new CombinedHTMLImageUpload();
-        //    viewModel = UpdateFolders(viewModel, null);
-        //    try
-        //    {
-        //        // Determine whether the directory exists.
-        //        if (Directory.Exists(path))
-        //        {
-        //            viewModel.Message = string.Format("The directory{0} exists already.", folderName);
-        //            Console.WriteLine(viewModel.Message);
-        //            return PartialView("ImageUpload", viewModel);
-        //        }
+        #region Templates CreateImageFolder
+        [HttpPost, ActionName("CreateImageFolder")]
+        public ActionResult CreateImageFolder(string folderName)
+        {
+            string path = Path.Combine(Server.MapPath("~" + _rootImagesFolderPath), folderName);
+            var viewModel = new CombinedHTMLImageUpload();
+            viewModel = UpdateFolders(viewModel, null);
+            try
+            {
+                // Determine whether the directory exists.
+                if (Directory.Exists(path))
+                {
+                    viewModel.Message = string.Format("The directory{0} exists already.", folderName);
+                    Console.WriteLine(viewModel.Message);
+                    return PartialView("ImageUpload", viewModel);
+                }
 
-        //        // Try to create the directory.
-        //        DirectoryInfo di = Directory.CreateDirectory(path);
-        //        viewModel.Message = string.Format("The directory{0} was created successfully at {1}.", folderName, Directory.GetCreationTime(path));
-        //        Console.WriteLine(viewModel.Message);
+                // Try to create the directory.
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                viewModel.Message = string.Format("The directory{0} was created successfully at {1}.", folderName, Directory.GetCreationTime(path));
+                Console.WriteLine(viewModel.Message);
 
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        viewModel.Message = string.Format("The process failed: {0}", e.ToString());
-        //        Console.WriteLine(viewModel.Message);
-        //        return PartialView("ImageUpload", viewModel);
-        //    }
+            }
+            catch (Exception e)
+            {
+                viewModel.Message = string.Format("The process failed: {0}", e.ToString());
+                Console.WriteLine(viewModel.Message);
+                return PartialView("ImageUpload", viewModel);
+            }
 
-        //    viewModel = UpdateFolders(viewModel, folderName);
+            viewModel = UpdateFolders(viewModel, folderName);
 
-        //    return PartialView("ImageUpload", viewModel);
+            return PartialView("ImageUpload", viewModel);
 
-        //}
+        }
 
-        //private CombinedHTMLImageUpload UpdateFolders(CombinedHTMLImageUpload viewModel, string selected)
-        //{
-        //    viewModel.Folders = GetImageFoldrs();
-        //    if (!string.IsNullOrEmpty(selected))
-        //    {
-        //        viewModel.SelectedFolder = viewModel.Folders.Where(x => x.Name == selected).Last();
-        //    }
-        //    else
-        //    {
-        //        viewModel.SelectedFolder = viewModel.Folders.Where(x => x.Name == _rootImagesFolder).Last();
-        //    }
+        private CombinedHTMLImageUpload UpdateFolders(CombinedHTMLImageUpload viewModel, string selected)
+        {
+            viewModel.Folders = GetImageFoldrs();
+            if (!string.IsNullOrEmpty(selected))
+            {
+                viewModel.SelectedFolder = viewModel.Folders.Where(x => x.Name == selected).Last();
+            }
+            else
+            {
+                viewModel.SelectedFolder = viewModel.Folders.Where(x => x.Name == _rootImagesFolder).Last();
+            }
 
-        //    return viewModel;
-        //}
-        //#endregion
+            return viewModel;
+        }
+        #endregion
 
-        //#region Templates GetImageFoldrs
+        #region Templates GetImageFoldrs
 
-        //private bool IsRootFolder(string path)
-        //{
-        //    var rootPhysicalPath = Server.MapPath("~/" + _rootImagesFolderPath);
-        //    if (rootPhysicalPath.Equals(path))
-        //    {
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        private bool IsRootFolder(string path)
+        {
+            var rootPhysicalPath = Server.MapPath("~/" + _rootImagesFolderPath);
+            if (rootPhysicalPath.Equals(path))
+            {
+                return true;
+            }
+            return false;
+        }
 
-        //private List<ImagesFolder> GetImageFoldrs()
-        //{
-        //    List<ImagesFolder> imgFolders = new List<ImagesFolder>();
-        //    // Process the list of files found in the directory. 
-        //    string rootPath = Server.MapPath("~/" + _rootImagesFolderPath);
-        //    string[] fileEntries = Directory.GetDirectories(rootPath);
-        //    foreach (string fileName in fileEntries)
-        //    {
-        //        ImagesFolder imagesFolder = new ImagesFolder() { Name = new DirectoryInfo(fileName).Name, Url = Path.Combine(rootPath, fileName) };
-        //        imgFolders.Add(imagesFolder);
-        //    }
-        //    //addd root
-        //    ImagesFolder imagesFolderRoot = new ImagesFolder() { Name = _rootImagesFolder, Url = rootPath };
-        //    imgFolders.Add(imagesFolderRoot);
+        private List<ImagesFolder> GetImageFoldrs()
+        {
+            List<ImagesFolder> imgFolders = new List<ImagesFolder>();
+            // Process the list of files found in the directory. 
+            string rootPath = Server.MapPath("~/" + _rootImagesFolderPath);
+            string[] fileEntries = Directory.GetDirectories(rootPath);
+            foreach (string fileName in fileEntries)
+            {
+                ImagesFolder imagesFolder = new ImagesFolder() { Name = new DirectoryInfo(fileName).Name, Url = Path.Combine(rootPath, fileName) };
+                imgFolders.Add(imagesFolder);
+            }
+            //addd root
+            ImagesFolder imagesFolderRoot = new ImagesFolder() { Name = _rootImagesFolder, Url = rootPath };
+            imgFolders.Add(imagesFolderRoot);
 
-        //    return imgFolders;
-        //}
+            return imgFolders;
+        }
 
-        //#endregion
+        #endregion
 
         #endregion
 

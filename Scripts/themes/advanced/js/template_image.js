@@ -10,7 +10,7 @@
     },
     init: function () {
         //image upload frame
-        $("#uploadImage").attr('src', tinyMCEPopup.editor.documentBaseURI.toAbsolute('ImageUpload'));
+        $("#uploadImage").attr('src', tinyMCEPopup.editor.documentBaseURI.toAbsolute(tinyMCE.Controller+'ImageUpload'));
     },
     initSliderThumbs: function (options) {
 

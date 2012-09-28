@@ -3,21 +3,22 @@
     ViewBag.Title = "Create";
 }
 
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
    <script src="@Url.Content("~/Scripts/sumkaScripts/create_product.js")" type="text/javascript"></script>
 <div class="container">
-    <div class="row">
-        <h2>
-            Create</h2>
+   
+      
         @using (Html.BeginForm())
         {
             @Html.ValidationSummary(true)
             <fieldset>
-                <legend>Product</legend>
+                <legend> Створити товар </legend>
                    @Html.HiddenFor(model => model.StoreID)
+                    <div class="row">
+                     <div class="span6">
                 <div class="editor-label">
-                    @Html.LabelFor(model => model.Product.Name)
+                    @Html.Label("Назва")
                 </div>
                 <div class="editor-field">
                     @Html.EditorFor(model => model.Product.Name)
@@ -30,31 +31,19 @@
                     @Html.EditorFor(model => model.BannerShortDescription)
                     @Html.ValidationMessageFor(model => model.BannerShortDescription)
                 </div>
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Product.HtmlBanner)
+              </div>
                 </div>
-                <div class="editor-field">
-                    @Html.TextAreaFor(model => model.Product.HtmlBanner, 25, 80,
-     new Dictionary<string, object> {	
-        {"style", "width:100%"}
-	 })
-                </div>
-                <div class="editor-label">
-                    @Html.LabelFor(model => model.Product.HtmlDetail)
-                </div>
-                <div class="editor-field">
-                    @Html.TextAreaFor(model => model.Product.HtmlDetail, 25, 80,
-     new Dictionary<string, object> {	
-        {"style", "width:100%"}
-	 })
-                </div>
+
+
+
+
                 <p>
-                    <input type="submit" value="Create" />
+                    <input type="submit" value="Створити" />
                 </p>
             </fieldset>
         }
         <div>
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Повернутись до списку", "Index")
         </div>
-    </div>
+   
 </div>
